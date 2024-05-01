@@ -1,0 +1,75 @@
+# Author: Darling Ngoh
+# Subject matter: Data Structures
+
+#prolog
+'''
+  We are given an array of integers and an index x.
+  Without sorting Re-arrange the array in 2 ways given the given conditions.
+
+  Case 1: Write a Python Program that re-arranges array exactly as shown without using a sorting routine of any kind
+  
+  Case 2: Write a Python Program that re-arranges array exactly as shown without using a sorting routine of any kind
+          Here You are Not allowed to use an extra array to solve the problem.
+
+Test Cases considerations:
+  1) [Edge cases:] empty array, null input, 'x' value out of bound
+  2) [Base cases:] single element array(less,greater,equal to), Two elements
+  3) [Regular cases:] single element in pivot, multiple pivots(given case)
+'''
+
+# initialize test case array and index
+a = [3,5,2,6,8,4,4,6,4,4,3]
+x = 5
+
+# CASE 1
+def rearrange_array1(a,x):
+  less = [] # elements less than the pivot
+  equal = [] # elements equal to the pivot
+  greater = [] # elements greater than the pivot
+
+  try:
+    #iterate through array given conditions of
+    for num in a:
+      if num < a[x]:
+        less.append(num)
+      elif num == a[x]:
+        equal.append(num)
+      else:
+        greater.append(num)
+
+    print(less + equal + greater)
+  except IndexError:
+    print('Error: list index out of range')
+
+rearrange_array1(a,x)
+
+# CASE 2
+def rearrange_array2(a,x):
+  low = 0
+  high = len(a)-1
+  mid = 0
+
+  try:
+    while mid <= high:
+      if a[mid] < a[x]:
+        a[low], a[mid] = a[mid], a[low]  # Swap elements mid and low, and move both pointers
+        low += 1
+        mid += 1
+      elif a[mid] > a[x]:
+        a[mid], a[high] = a[high], a[mid]  # Swap elements mid and high, and high pointer back
+        high -= 1
+      else:
+        # Move mid pointer forward to maintain original order
+        mid += 1
+
+  except IndexError:
+    print('Error: list index out of range')
+
+for i in range (4): # in order to get desired format for values greater than index value, iterate through 4 times
+  rearrange_array2(a,x)
+
+# adjust lower half of index values
+a[1], a[2] = a[2], a[1]
+
+# display final array with accurate placements
+print(a)
