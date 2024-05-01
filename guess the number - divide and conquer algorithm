@@ -1,0 +1,60 @@
+'''
+This program prompts the user for an integer n, tells
+the user to think of a number between 0 and n − 1, then makes guesses
+as to what the number is. After each guess, the program must ask the
+user if the number is lower, higher, or correct. Implement the
+divide-and-conquer algorithm. In particular, you should round
+up when the middle of your range is in between two integers. (For exam-
+ple, if your range is 0 to 31, you should guess 16 and not 15, but if your
+range is 0 to 30 you should certainly guess 15).
+'''
+
+import random
+
+#error handling for user input parameter for  guess number range
+while True:
+  try:
+    #prompt user for number and if viable print welcome message
+    n = int(input("Enter n: "))
+    if n <= 0:
+      n = int(input("Enter a positive integer for n: "))
+    if n > 0:
+      break
+
+  #exept valueerror to ensure user inputs positive integer only
+  except ValueError:
+    print("Enter a positive integer for n")
+
+print("Welcome to Guess My Number!")
+print(f'Please think of a number between {1} and {n-1}')
+
+#set lower and uppper guess bound to be updated continously
+l = 1
+r = n - 1
+guess = random.randint(l,r)
+
+print(f'Is your number {guess}?')
+print(f'Please enter C for correct, H for too high, or L for too low.')
+
+user_target = input("Enter your response (H/L/C): ").upper()
+
+while user_target != 'C':
+  #setting control handler for user inputs to ensure only H,C,L is allowed
+  while user_target != 'C':
+    if user_target == 'L':
+      break
+    elif user_target == 'H':
+      break
+    else:
+       user_target = input("Enter your response (H/L/C): ").upper()
+  #given appropriate input, we update the lower or upper integer bound
+  #...for our guess() range function
+  if user_target == 'L':
+    l = guess + 1
+  elif user_target == 'H':
+    r = guess - 1
+
+  guess = random.randint(l,r)
+  user_target = input(f'Is your number {guess}?').upper()
+
+print('Thank you for playing Guess My Number!')  
