@@ -1,0 +1,102 @@
+# Author: Darling Ngoh
+# Concept utility: Data Structures
+
+
+#prolog
+'''
+    Context and Problem Statement: A web search engine returns you a list of
+web-links that match the set of words in your query. Each web-link is assigned
+an integer for identification purposes(page-ID) This is done by maintaining an
+”inverted index”.
+An inverted index, at a very elementary level, is a mapping that takes a word
+and returns to you a list of web-links which contains the word.That list would
+be a sorted(ranked) array of page-IDs where the web-link with the highest rank
+for the query is displayed on top. When your query to the web search engine
+contains multiple words, the search engine needs to find the sorted array for each
+word and then computes the intersection of these arrays. Given the number of
+web-pages existing in the world-wide-web, this work is very computationally
+challenging !
+
+    In this assignment you are required to write programs which takes as input
+    two sorted arrays and returns a new array containing the elements found in
+    both the sorted arrays. It is alright if the input arrays have duplicates but the
+    returned array should be duplicate free !
+
+    #1 Implement the function in such a way that your solution solves the problem 
+    with O(mn) time complexity. O(mn) is same as O(m ∗ n).
+    
+    #2 In a separate implementation, code up a solution in such a way that your 
+    solution solves the problem with O(nlog(m)) time complexity 2
+
+    Below is how the arrays are represented
+    ARRAY1[] = [1, 6, 9, 10, 11, 21]
+    Here length of ARRAY1 is m.
+
+    ARRAY2[] = [2, 6, 9, 11, 17, 21]
+    Here length of ARRAY2 is n.
+
+    The output array to be returned would be:
+    ARRAY[] = [6, 9, 11, 21]
+
+Test Cases considerations:
+  1) [Edge cases:] empty array, null input, 'x' value out of bound
+  2) [Base cases:] single element array(less,greater,equal to), Two elements
+'''
+
+
+#1 Implement the function in such a way that your solution solves the problem with O(mn) time complexity. O(mn) is same as O(m ∗ n).
+ARRAY1 = [1, 6, 9, 10, 11, 21]
+ARRAY2 = [2, 6, 9, 11, 17, 21]
+
+
+def array_1(fir,sec):
+    # create temp list to keep track of unique ints in both arrays
+    duplicate_arr = []
+
+    #handle empty arrays or array of len 1
+    if len(fir) and len(sec) == 1:
+        print(fir,sec)
+    elif len(fir) and len(sec) < 1:
+        print('Empty arrays')
+
+        #iterate through first array and compare with second array
+        for i in fir:
+            if i in ARRAY2:
+                #add integers to new array that are the same
+                duplicate_arr.append(i)
+
+    print(duplicate_arr)
+
+array_1(ARRAY1,ARRAY2)
+
+
+#In a separate implementation, code up a solution in such a way that your solution can run linearly with O(m + n) ≈ O(N)...
+# time complexity.
+
+ARRAY1 = [1, 6, 9, 10, 11, 21]
+ARRAY2 = [2, 6, 9, 11, 17, 21]
+
+def array_3(fir,sec):
+    m, n = len(fir), len(sec)
+    i, j = 0, 0
+    duplicates = []
+
+    # Handle empty arrays
+    if not m or not n:
+        return duplicates
+
+    # Iterate through both arrays simultaneously
+    while i < m and j < n:
+        if fir[i] == sec[j]:
+            duplicates.append(fir[i])
+            i += 1
+            j += 1
+        elif fir[i] < sec[j]:
+            i += 1
+        else:
+            j += 1
+
+    print(duplicates)
+
+array_3(ARRAY1,ARRAY2)
+
