@@ -1,0 +1,97 @@
+# Author: Darling Ngoh
+# Concept: Data Structures
+
+#PROLOG:
+'''
+  Image rotation is a fundamental image-processing operation required to be per-
+formed in the areas of Computer Graphics , Computer Vision(Artificial Intelli-
+gence/Machine Learning) and Visual Analytics (Data Science).
+
+Here we will explore on ways to do a 90 degree clock-wise rotation of an example
+bit-map representation of an image aka A Matrix.
+
+# process 1)- Implement the function by allocating a new n X n 2D array.
+# process 2)- Implement the function WITHOUT allocating a new n X n 2D array.
+
+resulting matrix
+                  7 4 1
+                  8 5 2
+                  9 6 3
+Test cases:
+  Edge cases - null- matrix[none], or Empty[]
+  Base cases - single element[1]
+  Regular case - given matrix
+'''
+
+from typing_extensions import NoReturn
+# process 1)- Implement the function by allocating a new n X n 2D array.
+
+# initialize array of size (3x3)
+a = [[1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]]
+# initialize temp array
+b = [[0,0,0],[0,0,0],[0,0,0]]
+
+v = [1]
+
+def sideways(arr):
+  i = 0
+  if len(arr) > 1:
+    for j in (arr):
+      if j == arr[0]: # #replace every third index val of temp array in b with first list in a
+        for num in j:
+          b[i][2] = num
+          if i < 3:
+            i += 1
+        i = 0
+      elif j == arr[1]:#replace every second index val of temp array in b with second list in a
+        for num in j:
+          b[i][1] = num
+          if i < 3:
+            i += 1
+        i = 0
+      else:
+        for num in j: #replace every first index val of temp array in b with third list in a
+          b[i][0] = num
+          if i < 3:
+            i += 1
+    return b
+
+  elif len(arr) == 1:
+    print(arr)
+  else:
+    print('Empty array')
+
+
+sideways(a)
+
+
+# process 2)- Implement the function WITHOUT allocating a new n X n 2D array.
+'''
+Hint :
+First exchange elements in top row to bottom row, then swap the sym-
+metry elements at [i][j] with [j][i] where i represents rows and j represents columns.
+'''
+
+# initialize array of size (3x3)
+a = [[1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]]
+
+def sideways_2(arr):
+  if len(arr) > 1:
+    # swap elements in top row to bottom row
+    a[0], a[2] = a[2], a[0]
+
+    # Swap symmetry elements above the diagonal
+    for i in range(len(a)):
+          for j in range(i + 1, len(a[i])):
+              a[i][j], a[j][i] = a[j][i], a[i][j]
+    return a
+  elif len(arr) == 1:
+    print(arr)
+  else:
+    print('Empty array')
+
+sideways_2(a)
