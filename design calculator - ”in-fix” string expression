@@ -1,0 +1,101 @@
+# Author: Darling Ngoh
+# Concept Utility: Data Structures
+
+# prolog
+'''
+Exploring on ways to design a simple calculator that simplifies calculations
+...and returns an answer to the expression. Specifically ”pre-fix” string expression.
+
+Below is how the expression is represented. This expression is also known as an
+”in-fix” string expression
+10 * 2 - 15
+
+Further, there are space(s) between operands/operators in the expression. So
+your solution needs to think of these aspects.
+'''
+
+
+from collections import deque
+
+# define a function that evaluates an infix expression without parentheses using stacks and operator precedence.
+# Returns: The evaluated result of the expression, or None if the expression is invalid.
+# args: string containing the infix expression with spaces between tokens.
+
+def infix_calculator(expression):
+
+  # Stacks for operands and operators
+  operand_stack = deque()
+  operator_stack = deque()
+
+  # Operator precedence dictionary
+  precedence = {"+": 1, "-": 1, "*": 2, "/": 2, "^": 3}
+
+  for token in expression.split():
+    # Check if it's an operand (number)
+    try:
+      operand = int(token)
+      operand_stack.append(operand)
+    except ValueError:
+      # Check if it's an operator
+      while operator_stack and precedence[operator_stack[-1]] >= precedence[token]:
+        operator = operator_stack.pop()
+        operand2 = operand_stack.pop()
+        operand1 = operand_stack.pop()
+        result = evaluate(operand1, operand2, operator)
+        operand_stack.append(result)
+      operator_stack.append(token)
+
+  # Evaluate remaining expressions after processing all tokens
+  while operator_stack:
+    operator = operator_stack.pop()
+    operand2 = operand_stack.pop()
+    operand1 = operand_stack.pop()
+    result = evaluate(operand1, operand2, operator)
+    operand_stack.append(result)
+
+  # Check if there's only one element left (the final result)
+  if len(operand_stack) == 1:
+    return operand_stack.pop()
+  else:
+    return None  # Invalid expression (extra operands or missing operators)
+
+# define func that performs the mathematical operation based on the given operator.
+def evaluate(operand1, operand2, operator):
+  """
+  Args:
+    operand1: first operand.
+    operand2: second operand.
+    operator: mathematical operators (+, -, *, /).
+
+  Returns: The result of the operation.
+  """
+
+  if operator == "+":
+    return operand1 + operand2
+  elif operator == "-":
+    return operand1 - operand2
+  elif operator == "*":
+    return operand1 * operand2
+  elif operator == "/":
+    if operand2 == 0:
+      # Invalid expression (division by zero)
+      return None
+    else:
+      return operand1 / operand2
+  else:
+    # Invalid expression (unknown operator)
+    return None
+
+# expression to be solved
+print(infix_calculator("10 * 2 - 15"))  # Output: 5 (Correct)
+
+# Test cases (as comments)
+#print(infix_calculator("10 + 20 "))  # Output: 30 (Correct)
+#print(infix_calculator("20 / 5 - 2"))  # Output: 2 (Correct)
+#print(infix_calculator("5 / 0"))  # Output: None (Invalid: Division by zero)
+#print(infix_calculator("10 10"))  # Output: None (Invalid: Missing operator)
+
+
+# Using deque instead of a list provides efficient insertion and deletion at both ends (front and back),
+# which is crucial for stack operations in this scenario. While a list can also be used to
+# implement a stack, deque offers optimized performance for these specific operations.
