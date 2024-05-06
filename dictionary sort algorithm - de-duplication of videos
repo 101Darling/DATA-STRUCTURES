@@ -21,6 +21,11 @@ ARRAY[] = [50, 11, 33, 21, 40, 50, 40, 40, 21]
 Below is the expected output after de-duplication
 ARRAY[] = [11, 21, 33, 40, 50]
 
+Implement the function in such a way that your solution ,in
+theory, solves the problem with O(n log2(n)) time complexity overall but
+stays within the bounds of O(1) space complexity. Here, n is the length
+of the list of input integers (array).
+
 Test Cases considerations:
   1) [Edge cases:] empty array, null input, 'x' value out of bound
   2) [Base cases:] single element array(less,greater,equal to), Two elements
