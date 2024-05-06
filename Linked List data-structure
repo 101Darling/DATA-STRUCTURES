@@ -1,0 +1,117 @@
+# Author: Darling Ngoh
+# Concept: Data Structures
+
+
+#prolog
+'''
+  This we will explore on ways to do create and run operations on a Linked List
+data-structure.
+
+Create a Linked List data structure by writing your own node class.
+Your node class will house the data (integer in this case) and a pointer to 
+the next node element. Populate your linked list with the following integers and print.
+
+50, 11, 33, 21, 40, 71
+
+Delete N-th node from the end of the linked list and print the linked list af-
+ter deletion. Here N = 2
+
+Below is the expected output after deleting the second last element.
+50, 11, 33, 21, 71
+
+Note : Here we do not know the length of the list.
+Complete the above deletion operation without calculating the length of the list.
+Your solution should only make a single pass through the linked list, adhering
+to O(n) time complexity overall and O(1) space complexity.
+
+Test Cases considerations:
+  1) [Edge cases:] empty array, null input, deletion index out of range (nothing should be printed out)
+  2) [Base cases:] single element array, Two elements (only one element printed out)
+  3) [Regular cases:] multiple element list
+'''
+
+
+# initialize node in a linked list.
+class Node:
+
+  # Initialize Node object with the given data and a `next` pointer set to None
+  #args: data to be stored in the node
+  def __init__(self, data):
+    self.data = data
+    self.next = None
+
+  # Returns a string representation of the node.
+  def __str__(self):
+    return f"{self.data}"
+
+
+
+# Creating a linked list from the given list of data
+# args: data_list, a list of integers representing data for each node
+def create_linked_list(data_list):
+  head = None
+  tail = None
+
+  for data in data_list:
+    node = Node(data)
+    if head is None:
+      head = node
+    else:
+      tail.next = node
+    tail = node
+
+  # returns head node of the created linked list
+  return head
+
+# create linked list given integers
+data_list = [50, 11, 33, 21, 40, 71]
+head = create_linked_list(data_list)
+
+# Print the linked list
+current = head
+while current is not None:
+  print(current, end=" ")
+  current = current.next
+
+
+print('\n')
+'''
+ Initialize function that deletes the N-th node from the end of the linked list and returns the modified head.
+ args: head - The head node of the linked list,
+       n - The position of the node to be deleted from the end (1-based indexing)
+'''
+def delete_nth_node_from_end(head, n):
+  # a dummy node is added to handle edge cases where n might be greater than the length of the list.
+
+  dummy = Node(0)  # Dummy node to handle edge cases
+  dummy.next = head
+  slow = fast = dummy
+
+  # Move fast pointer n nodes ahead
+  for i in range(n):
+    if fast is None:
+      # If n is greater than the length of the list, return the unchanged list
+      return head
+    fast = fast.next
+
+  # Move both pointers together until fast reaches the end
+  while fast and fast.next:
+    slow = slow.next
+    fast = fast.next
+
+  # Remove the n'th node from the end given that slow points to the previous node
+  slow.next = slow.next.next
+
+  # Return the head node of the modified linked list.
+  return dummy.next
+
+# test case with given integer insteger list
+head = create_linked_list(data_list)
+n = 2  # Delete the second last node
+new_head = delete_nth_node_from_end(head, n)
+
+# Print the modified linked list
+current = new_head
+while current is not None:
+  print(current, end=" ")
+  current = current.next
