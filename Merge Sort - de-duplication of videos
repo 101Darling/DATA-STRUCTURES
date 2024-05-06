@@ -1,0 +1,90 @@
+# Author: Darling Ngoh
+# Concept: Data Structures
+
+#prolog
+'''
+In user content generated web-services - lets say YouTube - the process of de-
+duplication is of serious importance. One straight forward reason is same video
+by different names is just an extra cost in data-storage. So getting rid of exact
+duplicate content makes financial sense. Please be reminded that exact same
+content with different video qualities may not be candidates for removal via
+de-duplication.
+
+  Explore on ways to do a de-duplication of videos where video
+filenames are presented as integers. For the purposes of our task, we will set a
+very narrow criterion for de-duplication : just the filenames.
+
+Below is how the filenames are represented
+ARRAY[] = [50, 11, 33, 21, 40, 50, 40, 21, 40]
+
+Below is the expected output after de-duplication
+ARRAY[] = [11, 21, 33, 40, 50]
+
+Implement the function in such a way that your solution
+solves the problem with O(n log2(n)) time complexity overall and O(n)
+space complexity. Here, n is the length of the list of input integers (array).
+
+Test Cases considerations:
+  1) [Edge cases:] empty array, null input, 'x' value out of bound
+  2) [Base cases:] single element array(less,greater,equal to), Two elements
+  3) [Regular cases:] single element in pivot, multiple pivots(given case)
+'''
+
+
+ARRAY = [50, 11, 33, 21, 40, 50, 40, 21, 40]
+
+# initialize de-duplicates function with with O(n log(n)) time complexity and O(n) space complexity
+def deduplicate_filenames(filenames):
+  """
+  Returns:
+    A list of unique filenames.
+  """
+
+  # Sorting using Merge Sort (O(n log(n)) time complexity
+  def merge_sort(arr):
+    if len(arr) <= 1:
+      return arr
+
+    mid = len(arr) // 2
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
+
+    merged = []
+    i, j = 0, 0
+    while i < len(left) and j < len(right):
+      if left[i] <= right[j]:
+        merged.append(left[i])
+        i += 1
+      else:
+        merged.append(right[j])
+        j += 1
+
+    #add remaining values in sub-arrays
+    merged += left[i:]
+    merged += right[j:]
+
+    return merged
+
+  # De-duplication in linear time (O(n))
+  sorted_filenames = merge_sort(filenames)
+  unique_filenames = []
+  prev = None
+
+  #check each value and only include unique values given comparison
+  for name in sorted_filenames:
+    if name != prev:
+      unique_filenames.append(name)
+      prev = name
+
+  return unique_filenames
+
+# driver function to manage test case considerations
+def output(arr):
+  if len(arr) == 1:
+    return(arr)
+  elif len(arr) < 1:
+    return('Empty! Value(s) must be added in array for unique sorting')
+  else:
+    return deduplicate_filenames(arr)
+
+output(ARRAY)
