@@ -1,0 +1,77 @@
+# Author: Darling Ngoh
+# Concept: Data Structures
+
+# prolog
+'''
+Exploring on ways to design a simple calculator that simplifies calculations
+...and returns an answer to the expression.  Evaluating ”post-fix” string expression.
+
+To solve the problem a Stack will help - for which - You can use the collec-
+tions.deque data structure provided in Python.
+'''
+
+#import deque module from collections
+from collections import deque
+
+# create a function that evaluates a postfix expression using a stack.
+# Args: a string containing the postfix expression with spaces between operands and operators.
+def postfix_calculator(expression):
+  # Create a stack to store operands
+  stack = deque()
+
+  # Split the expression into tokens (operands and operators)
+  tokens = expression.split()
+
+  for token in tokens:
+    # Check if it's an operand (number)
+    try:
+      operand = int(token)
+      stack.append(operand)
+    except ValueError:
+      # Check if it's an operator
+      if len(stack) < 2:
+        return None  # Invalid expression (not enough operands)
+      operand2 = stack.pop()
+      operand1 = stack.pop()
+      result = None
+
+      # Perform the operation based on the operator
+      if token == "+":
+        result = operand1 + operand2
+      elif token == "-":
+        result = operand1 - operand2
+      elif token == "*":
+        result = operand1 * operand2
+      elif token == "/":
+        # Handle division by zero
+        if operand2 == 0:
+          return None  # Invalid expression (division by zero)
+        result = operand1 / operand2
+      else:
+        return None  # Invalid expression (unknown operator)
+
+      stack.append(result)
+
+  # Check if there's only one element left in the stack (the final result)
+  if len(stack) == 1:
+    return stack.pop()
+  else:
+    return None  # Invalid expression (extra operands)
+
+
+# Time Complexity: O(n)
+# The code iterates through the expression tokens once (linear time).
+
+# Space Complexity: O(n)
+# The stack can hold up to n operands in the worst case (linear space).
+
+
+# Expression evaluation
+print(postfix_calculator("3 2 + 1 -"))  # Output: 7 (Correct)
+
+
+# Test cases
+# print(postfix_calculator("4 2 * 1 +"))  # Output: 9 (Correct)
+# print(postfix_calculator("5 0 /"))  # Output: None (Invalid: Division by zero)
+# print(postfix_calculator("10 20 + 30"))  # Output: None (Invalid: Extra operand)
+# print(postfix_calculator(""))  # Output: None (Invalid: empty input)
