@@ -1,0 +1,81 @@
+# Author: Darling Ngoh
+# Concept: Data Structures
+
+# prolog
+'''
+Exploring ways to design a Queue with O(1) lookup time of the
+Maximum element using Deque.
+
+Here you will Maintain two Queues - a Main Queue and a Queue holding the
+Maximum value(s) from the Main Queue (AKA Max Queue). The Main Queue
+contains the elements. The Max Queue contains the elements with Maximum
+value. The Max Queue would have to be a double ended Queue as you would
+like to be able to remove elements from both ends.
+
+Edge Cases: Null, empty
+Base cases: single element in main queue
+Regular cases: Multiple elements in main queue (increasing order, decreasing order)
+'''
+
+
+from collections import deque
+
+# A queue implementation with O(1) lookup time for the maximum element using deque.
+class MaxQueue:
+
+  def __init__(self):
+    # nitialize the main queue and the max queue.
+    self.main_queue = deque()
+    self.max_queue = deque()
+
+  # Inserts an element into the main queue and updates the max queue.
+  # args: value- the value to enqueue
+  def enqueue(self, value):
+    self.main_queue.append(value)
+
+    # Remove elements from the back of the max queue until we find an element greater than or equal to the new value
+    while self.max_queue and self.max_queue[-1] < value:
+      self.max_queue.pop()
+
+    # Add the new value to the max queue
+    self.max_queue.append(value)
+
+
+  def dequeue(self):
+    """
+    Removes and returns the element from the front of the main queue,
+    also updating the max queue if needed.
+
+    Returns:
+      The dequeued element, or None if the queue is empty.
+    """
+
+    if not self.main_queue:
+      return None
+
+    element = self.main_queue.popleft()
+
+    # If the dequeued element is the current maximum, remove it from the max queue as well
+    if element == self.max_queue[0]:
+      self.max_queue.popleft()
+
+    return element
+
+# Returns the maximum element in the queue in O(1) time, or None if the queue is empty.
+  def get_max(self):
+
+    if not self.max_queue:
+      return None
+
+    return self.max_queue[0]
+
+# Example cases
+queue = MaxQueue()
+print(queue.get_max())  # Output: None
+queue.enqueue(1)
+print(queue.get_max())  # Output: 1
+queue.enqueue(4)
+queue.enqueue(8)
+print(queue.get_max())  # Output: 8
+print(queue.dequeue())  # Output: 1
+print(queue.get_max())  # Output: 8
