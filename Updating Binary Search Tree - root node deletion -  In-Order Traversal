@@ -1,0 +1,126 @@
+# Author: Darling Ngoh
+# Concept: Data Structures
+
+# prolog
+'''
+Explore specific ways to delete the root node of
+the Binary Search Tree (BST) while maintaining the Binary Search Tree
+(BST) property after deletion.
+
+
+[1] Delete the root node value of the BST and replace the root value with
+the appropriate value of the existing BST
+
+[2] Perform the BST status check by doing an In-Order Traversal of the
+BST such that even after deletion the BST is maintained.
+
+When you follow the deletion process and the BST traversal specified - the com-
+plexity of the solution will be as below.
+Time Complexity: O(n)
+Space Complexity: O(n)
+
+Edge Cases: Null, empty tree
+Base cases: single element in tree,
+    ...2 elements in a tree : apart from root, either just a left child or just a right child
+Regular cases: Multiple elements in tree with given case
+'''
+
+
+#import deque
+from collections import deque
+
+# Represents a node in the BST
+class Node:
+    def __init__(self, key):
+        self.data = key
+        self.left = None
+        self.right = None
+
+# Finds the node with the maximum value in the subtree rooted at `node`.
+def find_max_in_subtree(node):
+    current = node
+    while current.right:
+        current = current.right
+    return current
+
+# Function that deletes the root node of the BST and maintains BST properties.
+def delete_root(root):
+    if root is None:
+        return None
+
+    # Initialize new_root outside the if statements
+    new_root = None
+
+    if root.left is None:
+        new_root = root.right
+    elif root.right is None:
+        new_root = root.left
+    else:
+        # Find the maximum value in the left subtree
+        max_node = find_max_in_subtree(root.left)
+
+        # Replace the root's value with the maximum value
+        root.data = max_node.data
+
+        # Delete the maximum node from the left subtree
+        root.left = delete_node(root.left, max_node.data)
+
+        new_root = root
+
+    return new_root
+
+# Function to delete a specific node from the BST.
+def delete_node(root, key):
+    if root is None:
+        return root
+
+    if key < root.data:
+        root.left = delete_node(root.left, key)
+    elif key > root.data:
+        root.right = delete_node(root.right, key)
+    else:
+        if root.left is None:
+            return root.right
+        elif root.right is None:
+            return root.left
+
+        # Node with two children: Get the inorder successor (smallest
+        # in the right subtree)
+        root.data = find_min_in_subtree(root.right).data
+
+        # Delete the inorder successor
+        root.right = delete_node(root.right, root.data)
+
+    return root
+
+# Function to find the minimum value node in a subtree.
+def find_min_in_subtree(node):
+    current = node
+    while current.left:
+        current = current.left
+    return current
+
+# function to perform in-order traversal of the BST.
+def inorder_traversal(root):
+    if root:
+        inorder_traversal(root.left)
+        print(root.data, end=' ')
+        inorder_traversal(root.right)
+
+# Sample BST
+root = Node(4)
+root.left = Node(2)
+root.right = Node(6)
+root.left.left = Node(1)
+root.left.right = Node(3)
+root.right.left = Node(5)
+root.right.right = Node(7)
+
+
+# Perform deletion and traversal
+if root is None:
+    print("Empty BST")
+else:
+    root = delete_root(root)
+    # Call the funct. for traversal
+    inorder_traversal(root)  # Expected Output[1 2 3 5 6 7]
