@@ -1,0 +1,86 @@
+# Author: Darling Ngoh
+# Concept: Data Structures
+
+# prolog
+'''
+Explore ways to perform a Level Order Traversal on a Binary Tree.
+
+The root element of the binary tree is given to you. Your task is to return
+the level order traversal of the Binary Tree’s nodes’ values – from left to right,
+level by level.
+
+The code will return all the nodes of the Binary Tree in Level Order
+Traversal fashion - from left to right. That is: 4 2 6 1 3 5 7
+
+Level Order Tree Traversal with the help of the Queue data-structure should
+meet the following complexities as stated below.
+Time Complexity: O(n)
+Space Complexity: O(n)
+
+
+Edge Cases: Null, empty tree
+Base cases: single element in tree,
+    ...2 elements in a tree : apart from root, either just a left child or just a right child
+Regular cases: Multiple elements in tree with given case
+'''
+
+
+#import deque
+from collections import deque
+
+class Node:
+  # initialize a node in a binary tree.
+  def __init__(self, key):
+    self.data = key
+    self.left = None
+    self.right = None
+
+# def function to perfom level order traversal of a binary tree using a queue
+# args: The root node of the binary tree
+def level_order_traversal(root):
+  # If the root is None, there's no tree to traverse
+  if not root:
+    return []
+
+  # Create an empty queue to store tree nodes
+  queue = deque()
+  queue.append(root)
+
+  # Initialize an empty list to store level order values
+  result = []
+
+  while queue:
+    # Get the current level size
+    level_size = len(queue)
+
+    # Iterate through all nodes in the current level
+    for _ in range(level_size):
+      # Dequeue the current node
+      current_node = queue.popleft()
+
+      # Append the current node's value to the result
+      result.append(current_node.data)
+
+      # Add child nodes (if any) to the queue for the next level
+      if current_node.left:
+        queue.append(current_node.left)
+      if current_node.right:
+        queue.append(current_node.right)
+
+# Return list containing the level order traversal of the tree's node values.
+  return result
+
+# Sample binary tree
+root = Node(4)
+root.left = Node(2)
+root.right = Node(6)
+root.left.left = Node(1)
+root.left.right = Node(3)
+root.right.left = Node(5)
+root.right.right = Node(7)
+
+# Perform level order traversal
+traversal = level_order_traversal(root)
+
+# Print the level order traversal
+print(traversal)  # Output: [4, 2, 6, 1, 3, 5, 7]
