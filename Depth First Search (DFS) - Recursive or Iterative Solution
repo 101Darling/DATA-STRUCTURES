@@ -1,0 +1,74 @@
+# Student: Darling Ngoh
+# Concept: Data Structures
+
+# prolog
+'''
+Explore ways to perform a Depth First Search (DFS) of a given Graph.
+Your code will need to return the traversal of the nodes in DFS order, where
+the traversal starts from Node/Vertex 0.
+
+When you follow the traversal process as specified - the complexity of the solu-
+tion will be linear as shown below.
+Time Complexity: O(V + E), where V is the number of Vertices and
+E is the number of Edges respectively.
+Space Complexity: O(V )
+
+The linear space complexity would come from the recursion (AKA ”recursion
+stack”) you employ to traverse the Graph and the Hash Set to record the vis-
+ited nodes. If you solve the problem without recursion (using an explicit Stack),
+then the mentioned space complexity is obvious from the data structures used.
+
+[1] With Recursion.
+or
+[2] Iteratively by using an explicit Stack. Your choice of a Stack must be a
+Deque. API reference here:
+https://docs.python.org/3.6/library/collections.html#collections.deque
+
+Edge Cases: Null, empty graph
+Base cases: single element in graph, 2 elements in graph : apart from root
+Regular cases: Multiple elements in tree with given case
+'''
+
+
+# create a graph using an adjacency list.
+class Graph:
+    def __init__(self, V):
+        self.V = V  # Number of vertices
+        self.adj = [[] for i in range(V)]  # Adjacency list
+
+    # Adds an edge to the graph.
+    def addEdge(self, v, w):
+        self.adj[v].append(w)  # Add w to the adjacency list of v
+
+    # Performs Depth-First Search recursively
+    def dfs_recursive(self, v, visited):
+        visited.add(v)
+        print(v, end=" ")  # Visit the current node
+
+        # Recursive for all adjacent vertices
+        for neighbor in self.adj[v]:
+            if neighbor not in visited:
+                self.dfs_recursive(neighbor, visited)
+
+    # Starts the DFS traversal from vertex 0.
+    def dfs(self):
+        visited = set()  # Set to keep track of visited vertices
+        self.dfs_recursive(0, visited)  # Start DFS from vertex 0
+
+# Create a graph
+g = Graph(6)
+g.addEdge(0, 1)
+g.addEdge(0, 2)
+g.addEdge(2, 3)
+g.addEdge(2, 4)
+g.addEdge(4, 5)
+g.addEdge(1, 3)
+g.addEdge(3, 5)
+
+# Perform DFS traversal
+print('DFS traversal:', end=' ')
+g.dfs()
+
+# Test cases (as comments):
+# - Modify the graph structure to test different scenarios (e.g., disconnected graphs, cycles).
+# - Verify that the output matches the expected DFS order for the given graph.
