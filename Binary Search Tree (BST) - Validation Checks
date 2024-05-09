@@ -1,0 +1,133 @@
+# Author: Darling Ngoh
+# Concept: Data Structures
+
+# prolog
+'''
+Explore two specific ways to perform a validation check
+of whether a Binary Tree is actually a Binary Search Tree (BST).
+
+[1] Perform a check of constraints on node values for each sub-tree.
+
+Recall - for a Binary Tree to qualify as a Binary Search Tree,
+we must peform the node values check of-course but also must not forget the
+value checks at the sub-tree levels.
+
+[2] Perform the BST check by doing an In-Order Traversal of the Binary Tree. 
+Since we know that an in-order traversal of a BST results in nodes being 
+processed in ascendingly sorted order, as soon as there is a violation of 
+ascendingly sorted order we would know that the tree provided is not a BST.
+
+
+Edge Cases: Null, empty tree
+Base cases: single element in tree,
+    ...2 elements in a tree : apart from root, either just a left child or just a right child
+Regular cases: Multiple elements in tree with given case
+'''
+
+
+from collections import deque
+
+# Initialize a node in the BST.
+class Node:
+    def __init__(self, key):
+        self.data = key
+        self.left = None
+        self.right = None
+
+# create a funtion to check if a node's value satisfies BST constraints within given bounds.
+# Args: node: The node to be checked.
+# Args: lower_bound: The minimum allowed value (inclusive) for the node. Defaults to negative infinity.
+# Args: upper_bound: The maximum allowed value (inclusive) for the node. Defaults to positive infinity.
+def is_bst_node_constraints(node, lower_bound=float('-inf'), upper_bound=float('inf')):
+  if not node:
+    return True  # Empty subtree is considered valid
+
+  # Check if current node's value violates constraints
+  if node.data <= lower_bound or node.data >= upper_bound:
+    return False
+
+  # Recursively check left and right subtrees with adjusted bounds
+  return is_bst_node_constraints(node.left, lower_bound, node.data) and \
+         is_bst_node_constraints(node.right, node.data, upper_bound)
+
+# create a function that checks if the entire BST satisfies node value constraints.
+# args: root: The root node of the BST.
+def is_bst_constraints(root):
+# Returns True if the node's value satisfies BST constraints, False otherwise.
+  return is_bst_node_constraints(root)
+
+# Performs in-order traversal and checks for ascending order violation.
+# args: node: The node to be processed in the traversal.
+# args: prev: The previously visited node's value (initialization with negative infinity).
+def in_order(node, prev=float('-inf')):
+# Returns:True if the in-order traversal shows ascending order, False otherwise.
+  if not node:
+    return True  # Empty subtree is considered valid
+
+  # Check left subtree
+  if not in_order(node.left, prev):
+    return False
+
+  # Check for violation (current node should be greater than previous)
+  if node.data <= prev:
+    return False
+
+  # Update previous visited node and check right subtree
+  return in_order(node.right, node.data)
+
+# Check if the BST is valid using in-order traversal for ascending order.
+# args: root: The root node of the BST.
+def is_bst_in_order(root):
+  """
+  Returns:
+    True if the BST is valid based on in-order traversal, False otherwise.
+  """
+  # Start in-order traversal with negative infinity as the previous value
+  return in_order(root, float('-inf'))
+
+# 1. Create your Binary Search Tree (BST)
+root = Node(4)
+root.left = Node(2)
+root.right = Node(6)
+root.left.left = Node(1)
+root.left.right = Node(3)
+root.right.left = Node(5)
+root.right.right = Node(7)
+
+root2 = Node(4)
+root2.left = Node(8)
+root2.right = Node(1)
+root2.left.left = Node(90)
+
+# 2. Choosing validation method:
+
+# Method 1: Checking Node Value Constraints
+# - Valid BST: Use the provided sample tree
+# - Invalid BST: Create a tree where a node's value violates constraints
+is_bst = is_bst_constraints(root)
+is_bst2 = is_bst_constraints(root2)
+
+if is_bst:
+  print("BST valid based on node value constraints.")
+else:
+  print("BST not valid based on node value constraints.")
+
+if is_bst2:
+  print("BST valid based on node value constraints.")
+else:
+  print("BST not valid based on node value constraints.")
+
+# Method 2: In-Order Traversal Check
+# - Valid BST: Use the provided sample tree
+# - Invalid BST: Create a tree where the in-order traversal order is not ascending.
+is_bst = is_bst_in_order(root)
+is_bst2 = is_bst_in_order(root2)
+if is_bst:
+  print("BST valid based on in-order traversal.")
+else:
+  print("BST not valid based on in-order traversal.")
+
+if is_bst2:
+  print("BST valid based on in-order traversal.")
+else:
+  print("BST not valid based on in-order traversal.")
