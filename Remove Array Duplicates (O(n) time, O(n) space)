@@ -1,0 +1,37 @@
+# Author: Darling Ngoh
+# Concept: Data Structures
+'''
+Consider the below integer array which is already sorted
+[ 1, 2, 3, 4, 4, 6, 6, 6 ]
+Write a complete routine in Python which removes the duplicates from
+the array in O( n) time with O(n) space complexity owing to a hash
+structure. Your output should be [ 1, 2, 3, 4, 6]
+'''
+
+
+# 1 Remove Duplicates (O(n) time, O(n) space)
+# def function that Removes duplicates from a sorted array in-place.
+# args: nums: The input array containing sorted integers.
+def remove_duplicates(nums):
+    if not nums:
+        return 0
+
+    i = 0  # Unique element index
+    j = 1  # Traversal index
+    seen = set()  # Hash set to store seen elements
+
+    while j < len(nums):
+        if nums[j] not in seen:
+            seen.add(nums[j])
+            i += 1
+            nums[i] = nums[j]  # Overwrite duplicate with unique element
+        j += 1
+
+    # returns the new length of the array without duplicates.
+    return i + 1
+
+# Example usage
+nums = [1, 2, 3, 4, 4, 6, 6, 6]
+new_length = remove_duplicates(nums)
+# print only unique elements
+print(f"Array after removing duplicates: {nums[:new_length]}")
