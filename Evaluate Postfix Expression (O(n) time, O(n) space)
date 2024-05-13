@@ -1,0 +1,41 @@
+# Author: Darling Ngoh
+# Concept: Data Structures
+
+'''
+Consider the post-fix expression below as input
+Input: [”2”, ”1”, ”+”, ”4”, ”*”]
+Write a complete Python program to evaluate the given post-fix expression
+in O( n) time and with O(n) space complexity. The space complexity is
+derived from a data-structure which helps you solve the expression.
+'''
+
+# Evaluate Postfix Expression (O(n) time, O(n) space)
+from collections import deque
+
+# create a function that Evaluates a postfix expression using a stack (deque).
+# args: expr: The postfix expression as a list of strings (numbers and operators).
+def evaluate_postfix(expr):
+    stack = deque()
+    for token in expr:
+        if token.isdigit():
+            stack.append(int(token))
+        else:
+            operand2 = stack.pop()
+            operand1 = stack.pop()
+            if token == "+":
+                result = operand1 + operand2
+            elif token == "*":
+                result = operand1 * operand2
+            else:
+                # Handle other operators as needed (division, subtraction, etc.)
+                raise ValueError(f"Unsupported operator: {token}")
+            stack.append(result)
+
+    # returns the evaluated result of the expression.
+    return stack.pop()
+
+# Example array
+expr = ["2", "1", "+", "4", "*"]
+result = evaluate_postfix(expr)
+# print postfix evaluation
+print(f"Postfix expression evaluation: {result}")
