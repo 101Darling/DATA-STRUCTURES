@@ -1,0 +1,50 @@
+# Author: Darling Ngoh
+# Concept: Data Structures
+
+'''
+Write a complete Python program to only return the third smallest ele-
+ment in the Binary Search Tree. The value of the third smallest element...
+is ”300”. You may choose either a recursive or an iterative solution.
+'''
+
+#3. Find Third Smallest Element in BST (O(n) time, O(1) space)
+class Node:
+    #Represents a node in the BST
+    def __init__(self, key):
+        self.data = key
+        self.left = None
+        self.right = None
+
+# Find the third smallest element in a BST using in-order traversal.
+def find_third_smallest(root, count=0, smallest=None):
+    if not root:
+        return None, count  # Return None and count in the base case
+
+    # Find the third smallest element in the left subtree
+    smallest, count = find_third_smallest(root.left, count, smallest)
+
+    # Terminate further recursion if already found
+    if smallest is not None:
+        return smallest, count
+
+    # Increment count for each node visited
+    count += 1
+
+    # Check if the current node is the third smallest
+    if count == 3:
+        return root.data, count
+
+    # If the third smallest element is not found in the left subtree,
+    # continue searching in the right subtree
+    return find_third_smallest(root.right, count, smallest)
+
+# Usage
+root = Node(400)
+root.left = Node(200)
+root.right = Node(600)
+root.left.left = Node(100)
+root.left.right = Node(300)
+root.right.left = Node(500)
+root.right.right = Node(700)
+third_smallest, _ = find_third_smallest(root)
+print(f"Third smallest element: {third_smallest}")
